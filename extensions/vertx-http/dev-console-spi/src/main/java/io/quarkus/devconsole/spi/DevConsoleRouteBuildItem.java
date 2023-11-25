@@ -14,11 +14,12 @@ import io.vertx.ext.web.RoutingContext;
 /**
  * A route for handling requests in the dev console.
  * <p>
- * Routes are registered under /q/dev-v1/{groupId}.{artifactId}/
+ * Routes are registered under /q/dev-ui/{groupId}.{artifactId}/
  * <p>
  * The route is registered:
  * <ul>
- * <li>in the "regular" app router (runtime class loader), if the handler is produced by a recorder (i.e. implements
+ * <li>in the "regular" app router (runtime class loader), if the handler is
+ * produced by a recorder (i.e. implements
  * {@link io.quarkus.deployment.recording.BytecodeRecorderImpl.ReturnedProxy}),</li>
  * <li>in the Dev UI router (deployment class loader).</li>
  * </ul>
@@ -89,7 +90,8 @@ public final class DevConsoleRouteBuildItem extends MultiBuildItem {
         this.isBlockingHandler = false;
     }
 
-    private DevConsoleRouteBuildItem(String groupId, String artifactId, String path, String method, Class<?> callerClass,
+    private DevConsoleRouteBuildItem(String groupId, String artifactId, String path, String method,
+            Class<?> callerClass,
             Handler<RoutingContext> handler, boolean isBodyHandlerRequired, boolean isBlockingHandler) {
         this.groupId = groupId;
         this.artifactId = artifactId;
@@ -102,7 +104,8 @@ public final class DevConsoleRouteBuildItem extends MultiBuildItem {
     }
 
     /**
-     * Gets the group id and artifact ID. This needs the curate result to map the calling class to the
+     * Gets the group id and artifact ID. This needs the curate result to map the
+     * calling class to the
      * artifact that contains it in some situations (namely in dev mode tests).
      */
     public Map.Entry<String, String> groupIdAndArtifactId(CurateOutcomeBuildItem curateOutcomeBuildItem) {
@@ -181,7 +184,8 @@ public final class DevConsoleRouteBuildItem extends MultiBuildItem {
         public DevConsoleRouteBuildItem build() {
             Class<?> callerClass;
             if (groupId == null) {
-                String callerClassName = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass()
+                String callerClassName = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
+                        .getCallerClass()
                         .getCanonicalName();
                 try {
                     callerClass = Thread.currentThread().getContextClassLoader().loadClass(callerClassName);
@@ -191,7 +195,8 @@ public final class DevConsoleRouteBuildItem extends MultiBuildItem {
             } else {
                 callerClass = null;
             }
-            return new DevConsoleRouteBuildItem(groupId, artifactId, path, method, callerClass, handler, isBodyHandlerRequired,
+            return new DevConsoleRouteBuildItem(groupId, artifactId, path, method, callerClass, handler,
+                    isBodyHandlerRequired,
                     isBlockingHandler);
         }
 
